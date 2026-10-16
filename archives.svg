@@ -1,0 +1,20 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="spectra" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C8FF00" />
+      <stop offset="50%" stop-color="#34E27A" />
+      <stop offset="100%" stop-color="#2E5BFF" />
+    </linearGradient>
+    <clipPath id="squircle">
+      <path d="M32 2 C14 2 2 14 2 32 C2 50 14 62 32 62 C50 62 62 50 62 32 C62 14 50 2 32 2 Z" />
+    </clipPath>
+  </defs>
+  <!-- squircle com gradiente Spectra G2 -->
+  <path d="M32 2 C14 2 2 14 2 32 C2 50 14 62 32 62 C50 62 62 50 62 32 C62 14 50 2 32 2 Z" fill="url(#spectra)" />
+  <!-- Archives: camadas arquivadas + play -->
+  <g clip-path="url(#squircle)" stroke="rgba(10,11,15,0.7)" stroke-width="1.4" fill="none">
+    <path d="M16 22 H48 M16 30 H48" />
+    <path d="M16 38 H26 M38 38 H48" />
+  </g>
+  <path d="M29 34 L37 39 L29 44 Z" fill="#0A0B0F" />
+</svg>
