@@ -49883,8 +49883,14 @@ var SQ = class {
 		return this.entity.object3D.updateWorldMatrix(!0, !1), this.entity.object3D.matrixWorld.clone();
 	}
 	pathAnchor(e, t, n) {
-		if (e === "world" || e === "bone") return null;
+		if (e === "world") return null;
 		if (e === "spawn") return n ?? this.captureMatrix();
+		if (e === "bone") {
+			let [e, n] = (t ?? "").includes("/") ? (t ?? "").split("/", 2) : ["", t ?? ""], r = e ? this.find(e) : this.entity;
+			if (!r) return null;
+			let i = (n ? r.object3D.getObjectByName(n) : void 0) ?? r.object3D;
+			return i.updateWorldMatrix(!0, !1), i.matrixWorld;
+		}
 		let r = t || (e === "player" ? "Jogador" : ""), i = r ? this.find(r) : null;
 		return i ? (i.object3D.updateWorldMatrix(!0, !1), i.object3D.matrixWorld) : null;
 	}
@@ -49946,6 +49952,12 @@ var SQ = class {
 		} catch (e) {
 			return this.warn("Falha ao carregar:", e), !1;
 		}
+	}
+	sendEvent(e, t = 0, n) {
+		let r = (n) => {
+			for (let r of n.components) r.onEvent?.(e, t, this.entity);
+		};
+		n ? r(n) : this.entity.scene?.traverse(r);
 	}
 	particles(e, t) {
 		let n = (e ?? this.entity)?.getComponentByType("ParticleEmitter");

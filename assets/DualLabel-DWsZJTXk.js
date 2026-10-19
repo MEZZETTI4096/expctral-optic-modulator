@@ -1,0 +1,1 @@
+import{B as e,H as t}from"./index-CvYgS_Z_.js";var n=t();function r({code:t,icon:r,children:i}){return(0,n.jsxs)(`span`,{className:`dual`,children:[r&&(0,n.jsx)(e,{name:r,size:14}),(0,n.jsx)(`span`,{className:`dual__label`,children:i}),(0,n.jsx)(`span`,{className:`dual__code`,"aria-hidden":!0,children:t})]})}export{r as t};
