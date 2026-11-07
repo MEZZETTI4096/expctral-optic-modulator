@@ -38924,6 +38924,7 @@ var<${n}> ${e} : ${a};`;
 			antialias: !0,
 			alpha: !1,
 			forceWebGL: this.forceWebGL,
+			trackTimestamp: !0,
 			...r ? { device: r } : {}
 		});
 		if (await i.init(), performance.mark("expctral:renderer-device"), !this.forceWebGL && !i.backend?.isWebGPUBackend) throw i.dispose?.(), Error("WebGPU indisponível neste dispositivo");
@@ -38948,6 +38949,7 @@ var<${n}> ${e} : ${a};`;
 			storageBuffers: r,
 			nodeMaterials: !0,
 			timestampQuery: r ? !!t?.features.has("timestamp-query") : !1,
+			gpuTiming: !!e?.trackTimestamp && (r || !!e?.disjoint),
 			compatibilityMode: r ? !!e?.compatibilityMode : !1,
 			maxTextureSize: r ? t?.limits.maxTextureDimension2D ?? 0 : n?.getParameter(n.MAX_TEXTURE_SIZE) ?? 0,
 			gpuMemoryInfo: !0
@@ -39015,6 +39017,7 @@ var<${n}> ${e} : ${a};`;
 			storageBuffers: !1,
 			nodeMaterials: !1,
 			timestampQuery: !1,
+			gpuTiming: !1,
 			compatibilityMode: !1,
 			maxTextureSize: this.renderer.capabilities.maxTextureSize,
 			gpuMemoryInfo: !1
@@ -39061,7 +39064,11 @@ var uG = class {
 		drawCalls: 0,
 		triangles: 0,
 		gpuMemory: null,
-		compute: Qg.stats
+		compute: Qg.stats,
+		gpu: {
+			render: null,
+			compute: null
+		}
 	};
 	onBeforeRender = null;
 	onAfterRender = null;
@@ -39104,7 +39111,10 @@ var uG = class {
 		} catch {}
 		try {
 			let a = lG(this.canvas), o = await cG(a, e), s = this.canvas;
-			return this.canvas = a, s !== a && this.onCanvasReplaced?.(s, a), this.adopt(o), this.resize(i.x, i.y), zg(this.scene), this.onBackendChanged?.({
+			return this.canvas = a, s !== a && this.onCanvasReplaced?.(s, a), this.adopt(o), this.gpuTimes = {
+				render: null,
+				compute: null
+			}, this.gpuPending = !1, this.resize(i.x, i.y), zg(this.scene), this.onBackendChanged?.({
 				from: n,
 				to: this.backend,
 				reason: t
@@ -39182,14 +39192,35 @@ var uG = class {
 			e && r.position.add(e), this.renderer.render(this.scene.three, r), e && r.position.sub(e);
 		}
 		let i = fG(this.renderer, this.rendererKind);
-		this.onAfterRender?.(t);
+		this.onAfterRender?.(t), this.resolveGpuTimes();
 		let a = performance.now() - n, o = e > 0 ? 1 / e : 60;
 		this.fpsSmooth += (o - this.fpsSmooth) * .1, this.stats = {
 			fps: Math.round(this.fpsSmooth),
 			frameMs: +a.toFixed(2),
 			...i,
-			compute: Qg.stats
+			compute: Qg.stats,
+			gpu: this.capabilities?.gpuTiming ? { ...this.gpuTimes } : {
+				render: null,
+				compute: null
+			}
 		};
+	}
+	gpuTimes = {
+		render: null,
+		compute: null
+	};
+	gpuPending = !1;
+	resolveGpuTimes() {
+		if (!this.capabilities?.gpuTiming || this.gpuPending) return;
+		let e = this.renderer;
+		if (!e.resolveTimestampsAsync) return;
+		this.gpuPending = !0;
+		let t = Qg.stats.dispatches > 0;
+		Promise.all([e.resolveTimestampsAsync("render"), t ? e.resolveTimestampsAsync("compute") : Promise.resolve(void 0)]).then(([e, n]) => {
+			typeof e == "number" && (this.gpuTimes.render = e), this.gpuTimes.compute = t ? typeof n == "number" ? n : this.gpuTimes.compute : null;
+		}).catch(() => {}).finally(() => {
+			this.gpuPending = !1;
+		});
 	}
 	dispose() {
 		this.stop(), this.renderer.dispose?.();
@@ -39656,7 +39687,7 @@ var yG = class {
 			}).Else(() => {
 				o.assign(r.vec4(o.xyz, l));
 			}), n.element(i).assign(o), a.element(i).assign(s);
-		})().compute(i);
+		})().compute(i, [64]);
 		this.kernels = n ? [_(c, l, u, d), _(u, d, c, l)] : [_(c, l, c, l), _(c, l, c, l)], this.pingPong = n;
 		let v = n ? r.select(f.readB.greaterThan(.5), u.toAttribute(), c.toAttribute()) : c.toAttribute(), y = r.clamp(v.w.div(p), 0, 1), b = r.step(r.float(0), v.w).mul(r.step(v.w, p)), x = new e.SpriteNodeMaterial({
 			transparent: !0,
