@@ -1,4 +1,4 @@
-import{a as e,n as t}from"./sandbox-CiBVOTJ2.js";import{n,t as r}from"./store-DnGq-N5d.js";var i=e=>`// ${e} — script de componente
+import{a as e,n as t}from"./sandbox-Bj18fxbW.js";import{n,t as r}from"./store-DnGq-N5d.js";var i=e=>`// ${e} — script de componente
 // Estende Behaviour; campos em \`static editable\` viram controles no Inspector.
 
 export default class ${e} extends Behaviour {
