@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-runtime-By8HlURe.js";import{B as t}from"./index-DgT_HaMu.js";var n=e();function r({code:e,icon:r,children:i}){return(0,n.jsxs)(`span`,{className:`dual`,children:[r&&(0,n.jsx)(t,{name:r,size:14}),(0,n.jsx)(`span`,{className:`dual__label`,children:i}),(0,n.jsx)(`span`,{className:`dual__code`,"aria-hidden":!0,children:e})]})}export{r as t};
