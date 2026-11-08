@@ -1,4 +1,4 @@
-import{a as e,n as t}from"./sandbox-em_Harrh.js";import{n,t as r}from"./store-BDhiX1Yg.js";var i=e=>`// ${e} — script de componente
+import{a as e,n as t}from"./sandbox-BT_dpuoL.js";import{n,t as r}from"./store-BDhiX1Yg.js";var i=e=>`// ${e} — script de componente
 // Estende Behaviour; campos em \`static editable\` viram controles no Inspector.
 
 export default class ${e} extends Behaviour {
